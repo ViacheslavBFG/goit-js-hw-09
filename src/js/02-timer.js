@@ -8,9 +8,7 @@ import Notiflix from 'notiflix';
 import { convertMs } from './helpers';
 
 Notiflix.Report.info(
-  '',
-  'Таймер зворотнього відліку до смерті русні',
-  'Розпочнемо!'
+  'Go'
 );
 
 const refs = {
@@ -45,7 +43,7 @@ flatpickr(refs.datePicker, {
 
     if (selectedDates[0] <= currentDate) {
       Notiflix.Notify.failure(
-        'Вся русня здохне, але, на жаль, тільки в найближчому майбутньому. Оберіть бажану дату.',
+        'Hello',
         {
           timeout: 4000,
         }
@@ -53,7 +51,7 @@ flatpickr(refs.datePicker, {
       refs.startCountdown.disabled = true;
     } else {
       refs.startCountdown.disabled = false;
-      Notiflix.Notify.success('Запуску відліку до найбільшого свята готовий!');
+      Notiflix.Notify.success('time');
       refs.startCountdown.disabled = false;
     }
   },
@@ -63,12 +61,12 @@ function onStartCountdownClick(event) {
   refs.startCountdown.disabled = true;
   if (isActive) {
     Notiflix.Notify.warning(
-      'Таймер вже запущено, дочекайтесь закінчення роботи поточного і повторіть спробу'
+      'proces'
     );
     return;
   }
 
-  Notiflix.Notify.info('Відлік розпочато!');
+  Notiflix.Notify.info('lets go');
   let timeRemain = {};
 
   const interval = setInterval(() => {
@@ -83,7 +81,7 @@ function onStartCountdownClick(event) {
       console.log(timeRemain);
     } else {
       clearInterval(interval);
-      Notiflix.Report.success('Вся русня здохла!', '', 'Слава Україні!');
+      Notiflix.Report.success('End');
     }
   }, 1000);
 }
