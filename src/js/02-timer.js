@@ -31,7 +31,7 @@ refs.startCountdown.addEventListener('click', onStartCountdownClick);
 flatpickr(refs.datePicker, {
   enableTime: true,
   time_24hr: true,
-  defaultDate: new Date(), //встановлює поточну дату в інпут
+  defaultDate: new Date(), //
   minuteIncrement: 1,
   locale: 'uk',
 
