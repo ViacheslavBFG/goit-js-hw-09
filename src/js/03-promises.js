@@ -1,42 +1,45 @@
-'use strict';
 import Notiflix from 'notiflix';
 
-const refs = {
-  form: document.querySelector('.form'),
-  delay: document.querySelector('[name="delay"]'),
-  step: document.querySelector('[name="step"]'),
-  amount: document.querySelector('[name="amount"]'),
-  createPromisesBtn: document.querySelector('[type="submit"]'),
-};
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('.form');
 
-console.log(refs.amount);
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-refs.form.addEventListener('submit', onFormSubmit);
+    const delayInput = form.querySelector('input[name="delay"]');
+    const stepInput = form.querySelector('input[name="step"]');
+    const amountInput = form.querySelector('input[name="amount"]');
 
-function onFormSubmit(event) {
-  const amount = Number(refs.amount.value);
-  event.preventDefault();
-  for (let i = 1; i <= amount; i++) {
-    let totalDelay =
-      Number(refs.delay.value) + Number(refs.step.value) * (i - 1);
-    setTimeout(() => {
-      createPromise(i, totalDelay);
-    }, totalDelay);
-  }
-  refs.form.reset();
-}
+    const initialDelay = parseInt(delayInput.value);
+    const step = parseInt(stepInput.value);
+    const amount = parseInt(amountInput.value);
 
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
+    if (isNaN(initialDelay) || isNaN(step) || isNaN(amount)) {
+      Notiflix.Notify.failure('Please fill in all fields with valid numbers.');
+      return;
+    }
 
-  if (shouldResolve) {
-    return new Promise(resolve => {
-      Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}`);
+    for (let i = 1; i <= amount; i+=1) {
+      createPromise(i, initialDelay + (i - 1) * step)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        })
+        .catch(({ position, delay }) => {
+          Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+        });
+    }
+  });
+
+  function createPromise(position, delay) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const shouldResolve = Math.random() > 0.3;
+        if (shouldResolve) {
+          resolve({ position, delay });
+        } else {
+          reject({ position, delay });
+        }
+      }, delay);
     });
-  } else {
-    // Reject
-    return new Promise(reject => {
-      Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}`);
-    });
   }
-}
+});

@@ -1,33 +1,24 @@
-'use strict';
+function getRandomHexColor() {
+  return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
+}
 
-import { getRandomHexColor } from './helpers';
-const refs = {
-  body: document.body,
-  start: document.querySelector('[data-start'),
-  stop: document.querySelector('[data-stop'),
-};
-let isActive = false;
-let currentTimer;
-refs.start.disabled = false;
-refs.stop.disabled = true;
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
 
-refs.start.addEventListener('click', onStartClick);
-refs.stop.addEventListener('click', onEndClick);
+let intervalId = null;
 
-function onStartClick(event) {
-  if (isActive) return;
-  isActive = true;
-  currentTimer = setInterval(() => {
-    refs.body.style.backgroundColor = getRandomHexColor();
-    refs.start.disabled = true;
-    refs.stop.disabled = false;
+startButton.addEventListener('click', () => {
+    startButton.disabled = true;
+    stopButton.disabled = false;
+
+    intervalId = setInterval(() => {
+        document.body.style.backgroundColor = getRandomHexColor();
   }, 1000);
-  refs.start;
-}
+});
 
-function onEndClick(event) {
-  clearInterval(currentTimer);
-  refs.start.disabled = false;
-  refs.stop.disabled = true;
-  isActive = false;
-}
+stopButton.addEventListener('click', () => {
+    startButton.disabled = false;
+    stopButton.disabled = true;
+
+    clearInterval(intervalId);
+});
